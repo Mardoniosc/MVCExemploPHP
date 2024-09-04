@@ -1,0 +1,16 @@
+{
+    "name": "mardonio-costa/mvc-tasks",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Core\\": "core/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mardonio S Costa",
+            "email": "Mardonio@live.com"
+        }
+    ],
+    "require": {}
+}
