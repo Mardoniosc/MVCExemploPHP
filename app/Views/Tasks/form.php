@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo isset($task) ? 'Editar Tarefa' : 'Criar Nova Tarefa'; ?></title>
-    <link rel="stylesheet" href="/my_task_list/public/css/style.css">
+    <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
             </div>
         <?php endif; ?>
 
-        <form id="taskForm" action="<?php echo isset($task) ? '/my_task_list/task/update/' . $task->id : '/my_task_list/task/store'; ?>" method="POST">
+        <form id="taskForm" action="<?php echo isset($task) ? '/task/update/' . $task->id : '/task/store'; ?>" method="POST">
             <div>
                 <label for="title">Título:</label>
                 <input type="text" id="title" name="title" value="<?php echo isset($task) ? htmlspecialchars($task->title, ENT_QUOTES, 'UTF-8') : ''; ?>" required>
@@ -36,7 +36,7 @@
             <button type="submit"><?php echo isset($task) ? 'Atualizar' : 'Criar'; ?></button>
         </form>
 
-        <a href="/my_task_list/task">Voltar à Lista de Tarefas</a>
+        <a href="/task">Voltar à Lista de Tarefas</a>
     </div>
 
 

@@ -29,7 +29,7 @@ class TaskController extends Controller {
 
         if (empty($errors)) {
             if ($this->taskModel->createTask($title, $description)) {
-                header('Location: /my_task_list/task');
+                header('Location: /task');
                 exit;
             } else {
                 echo "Erro ao criar a tarefa.";
@@ -56,7 +56,7 @@ class TaskController extends Controller {
 
         if (empty($errors)) {
             if ($this->taskModel->updateTask($id, $title, $description)) {
-                header('Location: /my_task_list/task');
+                header('Location: /task');
                 exit;
             } else {
                 echo "Erro ao atualizar a tarefa.";
@@ -69,7 +69,7 @@ class TaskController extends Controller {
 
     public function delete($id) {
         if ($this->taskModel->deleteTask($id)) {
-            header('Location: /my_task_list/task');
+            header('Location: /task');
             exit;
         } else {
             echo "Erro ao excluir a tarefa.";
