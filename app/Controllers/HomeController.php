@@ -3,8 +3,18 @@
 namespace App\Controllers;
 
 use Core\Controller;
+use Core\Session;
 
 class HomeController extends Controller {
+    
+    public function __construct() {
+        // Verifica se o usuário está autenticado
+        if (!Session::isAuthenticated()) {
+            header('Location: /login');
+            exit;
+        }
+    }
+
     public function index() {
         $this->render('Home/index');
     }

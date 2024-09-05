@@ -5,11 +5,18 @@ namespace App\Controllers;
 use App\Model\Task;
 use Core\Controller;
 use App\Repository\TaskRepository;
+use Core\Session;
 
 class TaskController extends Controller {
     private $taskRepository;
 
     public function __construct() {
+         // Verifica se o usuário está autenticado
+         if (!Session::isAuthenticated()) {
+            header('Location: /login');
+            exit;
+        }
+        
         $this->taskRepository = new TaskRepository();
     }
 
