@@ -2,18 +2,19 @@
 
 namespace App\Controllers;
 
+use App\Model\Task;
 use Core\Controller;
-use App\Models\Task;
+use App\Repository\TaskRepository;
 
 class TaskController extends Controller {
-    private $taskModel;
+    private $taskRepository;
 
     public function __construct() {
-        $this->taskModel = new Task();
+        $this->taskRepository = new TaskRepository();
     }
 
     public function index() {
-        $tasks = $this->taskModel->getAllTasks();
+        $tasks = $this->taskRepository->list();
         $this->render('Tasks/index', ['tasks' => $tasks]);
     }
 
@@ -22,13 +23,14 @@ class TaskController extends Controller {
     }
 
     public function store() {
-        $title = $_POST['title'] ?? '';
-        $description = $_POST['description'] ?? '';
+        $task = new Task();
+        $task->title = $_POST['title'] ?? '';
+        $task->description = $_POST['description'] ?? '';
 
-        $errors = $this->validateForm($title, $description);
+        $errors = $this->validateForm($task);
 
         if (empty($errors)) {
-            if ($this->taskModel->createTask($title, $description)) {
+            if ($this->taskRepository->insert($task)) {
                 header('Location: /task');
                 exit;
             } else {
@@ -40,7 +42,7 @@ class TaskController extends Controller {
     }
 
     public function edit($id) {
-        $task = $this->taskModel->getTaskById($id);
+        $task = $this->taskRepository->listById($id);
         if ($task) {
             $this->render('Tasks/form', ['task' => $task]);
         } else {
@@ -52,23 +54,30 @@ class TaskController extends Controller {
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
 
-        $errors = $this->validateForm($title, $description);
+        $task = new Task();
+        $task->title = $_POST['title'] ?? '';
+        $task->description = $_POST['description'] ?? '';
+        $task->id = $id;
+
+        $errors = $this->validateForm($task);
 
         if (empty($errors)) {
-            if ($this->taskModel->updateTask($id, $title, $description)) {
+
+
+            if ($this->taskRepository->update($task)) {
                 header('Location: /task');
                 exit;
             } else {
                 echo "Erro ao atualizar a tarefa.";
             }
         } else {
-            $task = $this->taskModel->getTaskById($id);
+            $task = $this->taskRepository->listById($id);
             $this->render('Tasks/form', ['task' => $task, 'errors' => $errors]);
         }
     }
 
     public function delete($id) {
-        if ($this->taskModel->deleteTask($id)) {
+        if ($this->taskRepository->delete($id)) {
             header('Location: /task');
             exit;
         } else {
@@ -76,18 +85,18 @@ class TaskController extends Controller {
         }
     }
 
-    private function validateForm($title, $description) {
+    private function validateForm(Task $task) {
         $errors = [];
 
-        if (empty($title)) {
+        if (empty($task->title)) {
             $errors[] = 'O título é obrigatório.';
-        } elseif (strlen($title) < 3) {
+        } elseif (strlen($task->title) < 3) {
             $errors[] = 'O título deve ter pelo menos 3 caracteres.';
         }
 
-        if (empty($description)) {
+        if (empty($task->description)) {
             $errors[] = 'A descrição é obrigatória.';
-        } elseif (strlen($description) < 5) {
+        } elseif (strlen($task->description) < 5) {
             $errors[] = 'A descrição deve ter pelo menos 5 caracteres.';
         }
 

@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use Core\Controller;
-use App\Models\Task;
 
 class HomeController extends Controller {
     public function index() {
