@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Define a root directory
+RewriteBase /my_task_list
+
+# Routes all requests to public/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/index.php?url=$1 [QSA,L]
