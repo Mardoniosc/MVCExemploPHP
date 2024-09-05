@@ -23,3 +23,40 @@
 </form>
 
 <a href="/my_task_list/task">Voltar à Lista de Tarefas</a>
+
+
+
+
+<script>
+document.getElementById('taskForm').addEventListener('submit', function(event) {
+    let valid = true;
+    let title = document.getElementById('title');
+    let description = document.getElementById('description');
+
+    // Reset errors
+    document.getElementById('titleError').textContent = '';
+    document.getElementById('descriptionError').textContent = '';
+
+    // Validate title
+    if (title.value.trim() === '') {
+        document.getElementById('titleError').textContent = 'O título é obrigatório.';
+        valid = false;
+    } else if (title.value.trim().length < 3) {
+        document.getElementById('titleError').textContent = 'O título deve ter pelo menos 3 caracteres.';
+        valid = false;
+    }
+
+    // Validate description
+    if (description.value.trim() === '') {
+        document.getElementById('descriptionError').textContent = 'A descrição é obrigatória.';
+        valid = false;
+    } else if (description.value.trim().length < 5) {
+        document.getElementById('descriptionError').textContent = 'A descrição deve ter pelo menos 5 caracteres.';
+        valid = false;
+    }
+
+    if (!valid) {
+        event.preventDefault(); // Prevent form submission if validation fails
+    }
+});
+</script>

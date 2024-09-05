@@ -9,10 +9,21 @@
                 <strong><?php echo $task->title; ?></strong>
                 <p><?php echo $task->description; ?></p>
                 <a href="/my_task_list/task/edit/<?php echo $task->id; ?>">Editar</a>
-                <a href="/my_task_list/task/delete/<?php echo $task->id; ?>" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                <a href="#" class="delete-link" data-id="<?php echo $task->id; ?>">Excluir</a>
             </li>
         <?php endforeach; ?>
     <?php else : ?>
         <p>Nenhuma tarefa encontrada.</p>
     <?php endif; ?>
 </ul>
+
+<script>
+document.querySelectorAll('.delete-link').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+        event.preventDefault();
+        if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+            window.location.href = '/my_task_list/task/delete/' + this.getAttribute('data-id');
+        }
+    });
+});
+</script>
