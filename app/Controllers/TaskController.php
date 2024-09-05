@@ -25,10 +25,17 @@ class TaskController extends Controller {
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
 
-        if ($this->taskModel->createTask($title, $description)) {
-            header('Location: /my_task_list/task');
+        $errors = $this->validateForm($title, $description);
+
+        if (empty($errors)) {
+            if ($this->taskModel->createTask($title, $description)) {
+                header('Location: /my_task_list/task');
+                exit;
+            } else {
+                echo "Erro ao criar a tarefa.";
+            }
         } else {
-            echo "Erro ao criar a tarefa.";
+            $this->render('Tasks/form', ['errors' => $errors]);
         }
     }
 
@@ -45,19 +52,46 @@ class TaskController extends Controller {
         $title = $_POST['title'] ?? '';
         $description = $_POST['description'] ?? '';
 
-        if ($this->taskModel->updateTask($id, $title, $description)) {
-            header('Location: /my_task_list/task');
+        $errors = $this->validateForm($title, $description);
+
+        if (empty($errors)) {
+            if ($this->taskModel->updateTask($id, $title, $description)) {
+                header('Location: /my_task_list/task');
+                exit;
+            } else {
+                echo "Erro ao atualizar a tarefa.";
+            }
         } else {
-            echo "Erro ao atualizar a tarefa.";
+            $task = $this->taskModel->getTaskById($id);
+            $this->render('Tasks/form', ['task' => $task, 'errors' => $errors]);
         }
     }
 
     public function delete($id) {
         if ($this->taskModel->deleteTask($id)) {
             header('Location: /my_task_list/task');
+            exit;
         } else {
             echo "Erro ao excluir a tarefa.";
         }
+    }
+
+    private function validateForm($title, $description) {
+        $errors = [];
+
+        if (empty($title)) {
+            $errors[] = 'O título é obrigatório.';
+        } elseif (strlen($title) < 3) {
+            $errors[] = 'O título deve ter pelo menos 3 caracteres.';
+        }
+
+        if (empty($description)) {
+            $errors[] = 'A descrição é obrigatória.';
+        } elseif (strlen($description) < 5) {
+            $errors[] = 'A descrição deve ter pelo menos 5 caracteres.';
+        }
+
+        return $errors;
     }
 
     private function render($view, $data = []) {
